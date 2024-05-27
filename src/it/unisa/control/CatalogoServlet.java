@@ -84,9 +84,37 @@ public class CatalogoServlet extends HttpServlet {
 		
 	}
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		doGet(request, response);
-	}
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String action = request.getParameter("action");
+        if ("add".equals(action)) {
+            String nome = request.getParameter("nome");
+            String descrizione = request.getParameter("descrizione");
+            String iva = request.getParameter("iva");
+            String prezzo = request.getParameter("prezzo");
+            String dataUscita = request.getParameter("dataUscita");
+            String quantita = request.getParameter("quantità");
+            String img = request.getParameter("img");
+            String piattaforma = request.getParameter("piattaforma");
+            String genere = request.getParameter("genere");
+            String descDett = request.getParameter("descDett");
 
+            // Validazione dei parametri
+            if (containsInvalidChars(nome) || containsInvalidChars(descrizione) || containsInvalidChars(iva) ||
+                containsInvalidChars(prezzo) || containsInvalidChars(dataUscita) || containsInvalidChars(img) ||
+                containsInvalidChars(piattaforma) || containsInvalidChars(genere) || containsInvalidChars(descDett)) {
+                request.setAttribute("error", "Caratteri < e > non sono consentiti.");
+                request.getRequestDispatcher("/admin/GestioneCatalogo.jsp").forward(request, response);
+                return;
+            }
+
+            // Logica per aggiungere il prodotto
+            // ...
+        }
+    }
+
+    private boolean containsInvalidChars(String input) {
+        return input != null && (input.contains("<") || input.contains(">") ||
+                                 input.contains("&lt;") || input.contains("&gt;") ||
+                                 input.contains("%3C") || input.contains("%3E"));
+    }
 }
